@@ -10,7 +10,6 @@
 - 역할: 백엔드 개발 90%, 프론트엔드 10%, 아키텍처 설계, 배포
 - 팀 구성: 3인 (디자인 1, FE 2, BE/AI 2) 
 
----
 
 ## 2. Problem Definition
 
@@ -20,7 +19,6 @@
 - 카페 사장님 입장에서는
   - 좌석별 이용 패턴, 피크타임, 회전율 등 **데이터 기반 운영 지표 부족**
 
----
 
 ## 3. Solution & Key Features
 
@@ -43,7 +41,6 @@
 - 기본 통계
   - 시간대별 이용률, 요일별 피크타임, 좌석 유형별 선호도 등 *(구현 범위에 맞게 조정)*
 
----
 
 ## 4. Tech Stack
 
@@ -70,23 +67,11 @@
 - AWS EC2 로 배포
 - GitHub Actions로 CI (lint/test)
 
----
-
-## 5. System Architecture
-
-- Client (React)
-- API 서버 (Django REST)
-- ML/Detection 서비스 (비동기 호출)
-- PostgreSQL (서비스 데이터)
-- Object Storage (플로어플랜/이미지)
-
----
-
-## 6. Database & Domain Model
+## 5. Database & Domain Model
 
 주요 엔티티:
 
-- **User**: Guest / Owner 권한 구분
+- **User**: User / Owner 권한 구분
 - **Cafe**: 카페 기본 정보, 위치, 영업 시간, 태그(분위기 등)
 - **FloorPlan**: 카페 한 층의 도면 이미지 및 메타 정보
 - **Table / Chair**: 좌석 위치, 상태, 좌석 유형
@@ -94,11 +79,10 @@
 
 <img width="1658" height="750" alt="image" src="https://github.com/user-attachments/assets/90b0eefc-56e6-482e-92e5-7ce5e858f3e5" />
 
----
 
-## 7. Key Technical Challenges & How I Solved Them
+## 6. Key Technical Challenges & How I Solved Them
 
-### 7-1. JWT Cookie 기반 인증 & 프론트 연동
+### 6-1. JWT Cookie 기반 인증 & 프론트 연동
 
 - 문제: 모바일/웹 환경에서 토큰 만료 시 401 연속 발생, 리프레시 흐름 꼬임
 - 해결:
@@ -106,7 +90,7 @@
   - 프론트에서 Axios 인터셉터로 401 감지 → `/auth/refresh` 요청 → 재시도
   - 비동기 요청 여러 개가 동시에 401 나는 경우, **refresh 요청은 한 번만 보내도록 로직 직렬화**
 
-### 7-2. 플로어플랜 이미지 기반 좌석 자동 감지
+### 6-2. 플로어플랜 이미지 기반 좌석 자동 감지
 
 - 문제: 사장님이 직접 좌석 하나씩 등록하면 너무 번거롭고 실수 발생
 - 해결:
@@ -116,28 +100,8 @@
   - 프론트에서 해당 좌표를 기반으로 SVG/Canvas에 좌석 오버레이
   - 이후 사장님이 드래그로 좌표 미세조정 후 저장 가능하게 구현
 
-### 7-3. 좌석 상태 실시간 동기화
 
-- (구현 범위에 따라) WebSocket으로 좌석 상태 업데이트 브로드캐스트  
-  또는 일정 주기 polling 전략 사용
-- 좌석 상태 변경 이벤트를 단일 엔드포인트로 모아서 **중앙에서 검증/로그 남김**
-
----
-
-## 8. Code Highlights
-
-- 인증/권한 처리 코드 (Owner/Guest 분리, permission class)
-- FloorPlan detection 처리 view & service 코드
-- Frotnend에서의 플로어플랜 렌더링/좌표 변환 로직
-
-> 🔗 주요 코드 예시 링크:
-> - [백엔드 인증/권한 코드](#)
-> - [플로어플랜 감지/저장 로직](#)
-> - [좌석 UI 렌더링 컴포넌트](#)
-
----
-
-## 9. Result & Learnings
+## 7. Result & Learnings
 
 - REST API 설계/문서화, JWT 기반 인증/권한 분리 경험
 - 실제 서비스 관점에서
@@ -148,9 +112,8 @@
   - 추천 시스템 (선호 카페/시간대 기반 개인화 추천)
   - 좌석 혼잡도 예측 (이전 패턴 기반) 기능까지 확장할 계획
 
----
 
-## 10. Links
+## 8. Links
 
 - Backend Repository: [https://github.com/ajy121650/beanBack]
 - Frontend Repository: [https://github.com/eileen914/Bean_Front_Clean]
